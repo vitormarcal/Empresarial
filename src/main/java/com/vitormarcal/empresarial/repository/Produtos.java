@@ -30,7 +30,7 @@ public class Produtos implements Serializable {
 	public Produto guardar(Produto produto) {
 		return manager.merge(produto);
 	}
-	
+
 	@Transactional
 	public void remover(Produto produto) {
 		try {
@@ -45,26 +45,25 @@ public class Produtos implements Serializable {
 	public Produto porSku(String sku) {
 		try {
 			return manager.createQuery("from Produto where upper(sku) = :sku", Produto.class)
-				.setParameter("sku", sku.toUpperCase())
-				.getSingleResult();
+					.setParameter("sku", sku.toUpperCase()).getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<Produto> filtrados(ProdutoFilter filtro) {
 		Session session = manager.unwrap(Session.class);
 		Criteria criteria = session.createCriteria(Produto.class);
-		
+
 		if (StringUtils.isNotBlank(filtro.getSku())) {
 			criteria.add(Restrictions.eq("sku", filtro.getSku()));
 		}
-		
+
 		if (StringUtils.isNotBlank(filtro.getNome())) {
 			criteria.add(Restrictions.ilike("nome", filtro.getNome(), MatchMode.ANYWHERE));
 		}
-		
+
 		return criteria.addOrder(Order.asc("nome")).list();
 	}
 
@@ -76,5 +75,5 @@ public class Produtos implements Serializable {
 		return this.manager.createQuery("from Produto where upper(nome) like :nome", Produto.class)
 				.setParameter("nome", nome.toUpperCase() + "%").getResultList();
 	}
-	
+
 }
