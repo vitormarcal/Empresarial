@@ -32,6 +32,7 @@
 	<http auto-config="false" use-expressions="true">
 		<custom-filter ref="exceptionTranslationFilter" before="FILTER_SECURITY_INTERCEPTOR" />
 
+	<intercept-url pattern="/relatorios/**" access="isAuthenticated()" />
 		<intercept-url pattern="/clientes/**" access="isAuthenticated()" />
 		<intercept-url pattern="/Home.xhtml" access="isAuthenticated()" />
 		<intercept-url pattern="/AcessoNegado.xhtml" access="isAuthenticated()" />

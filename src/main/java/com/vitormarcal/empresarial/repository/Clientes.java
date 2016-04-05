@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +16,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.vitormarcal.empresarial.model.Cliente;
-import com.vitormarcal.empresarial.model.Produto;
 import com.vitormarcal.empresarial.repository.filter.ClienteFilter;
 import com.vitormarcal.empresarial.service.NegocioException;
 import com.vitormarcal.empresarial.util.jpa.Transactional;
@@ -53,6 +53,17 @@ public class Clientes implements Serializable {
 				.getResultList();
 	}
 
+	public Cliente porDocumentoReceitaFederal(String documentoReceitaFederal) {
+		try {
+			return this.manager.createQuery("from Cliente where upper(documentoReceitaFederal)"
+					+ " like :documentoReceitaFederal",Cliente.class)
+					.setParameter("documentoReceitaFederal", documentoReceitaFederal.toUpperCase())
+					.getSingleResult();
+		} catch (NoResultException nre) {
+			return null;
+		}
+	}	
+	
 	@SuppressWarnings("unchecked")
 	public List<Cliente> filtrados(ClienteFilter filtro) {
 		Session session = manager.unwrap(Session.class);
@@ -68,5 +79,7 @@ public class Clientes implements Serializable {
 			criteria.add(Restrictions.eq("documentoReceitaFederal", filtro.getDocumentoReceitaFederal()));
 		}
 		return criteria.addOrder(Order.asc("nome")).list();
-	}	
+	}
+
+	
 }

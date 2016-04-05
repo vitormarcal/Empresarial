@@ -9,14 +9,14 @@ import com.vitormarcal.empresarial.model.Cliente;
 import com.vitormarcal.empresarial.repository.Clientes;
 import com.vitormarcal.empresarial.util.cdi.CDIServiceLocator;
 
-@FacesConverter(forClass=Cliente.class)
+@FacesConverter(forClass = Cliente.class)
 public class ClienteConverter implements Converter {
 
 	//@Inject
 	private Clientes clientes;
 	
 	public ClienteConverter() {
-		this.clientes = (Clientes) CDIServiceLocator.getBean(Clientes.class);
+		this.clientes = CDIServiceLocator.getBean(Clientes.class);
 	}
 	
 	@Override
@@ -24,7 +24,8 @@ public class ClienteConverter implements Converter {
 		Cliente retorno = null;
 
 		if (value != null) {
-			retorno = this.clientes.porId(new Long(value));
+			Long id = new Long(value);
+			retorno = this.clientes.porId(id);
 		}
 
 		return retorno;
@@ -33,7 +34,8 @@ public class ClienteConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value != null) {
-			return ((Cliente) value).getId().toString();
+			Cliente cliente = (Cliente) value;
+			return cliente.getId() == null ? null : cliente.getId().toString();
 		}
 		return "";
 	}
