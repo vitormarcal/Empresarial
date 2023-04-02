@@ -1,5 +1,7 @@
 # Empresarial
-Sistema Comercial de Pedidos de Venda
+Sistema Comercial de Pedidos de Venda - Curso da Algaworks
+
+Atenção! projeto bastante antigo, arquivado
 
 Tecnologias ultilizadas:
 
